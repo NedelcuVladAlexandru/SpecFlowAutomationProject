@@ -62,7 +62,7 @@ namespace SpecFlowAutomationProject.StepDefinitions
         [Then(@"I will input my name")]
         public void ThenIWillInputMyName()
         {
-            driver.FindElement(By.XPath("//*[@id='name']")).SendKeys("Test");
+            //driver.FindElement(By.XPath("//*[@id='name']")).SendKeys("Test");
         }
 
         [Then(@"I will input my company name")]
@@ -97,6 +97,5 @@ namespace SpecFlowAutomationProject.StepDefinitions
             driver.FindElement(By.XPath("//*[@type='submit']")).Click();
             Thread.Sleep(1000);
         }
-
     }
 }

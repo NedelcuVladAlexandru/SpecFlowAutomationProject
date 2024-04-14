@@ -1,44 +1,30 @@
-﻿using BoDi;
+﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Firefox;
-using TechTalk.SpecFlow;
 
-namespace SpecFlowAutomationProject.Hooks
+[Binding]
+public sealed class Hooks
 {
-    [Binding]
-    public sealed class Hooks
+    private static IWebDriver _driver;
+
+    //Adapted the setup in such a way that it is gonna run one web page per feature. Will possibly add the option of running it per scenario like it was before. Maybe with tags or background?
+
+    [BeforeFeature]
+    public static void BeforeFeature()
     {
-        private readonly IObjectContainer _container;
+        IWebDriver driver = new ChromeDriver();
+        driver.Manage().Window.Maximize();
 
-        public Hooks(IObjectContainer container)
-        {
-            _container = container;
-        }
+        _driver = driver;
+    }
 
-        [BeforeScenario()]
-        public void FirstBeforeScenario()
-        {
-            if (_container != null && !_container.IsRegistered<IWebDriver>())
-            {
-                IWebDriver driver = new ChromeDriver();
-                driver.Manage().Window.Maximize();
+    public static IWebDriver GetDriver()
+    {
+        return _driver;
+    }
 
-                _container.RegisterInstanceAs<IWebDriver>(driver);
-            }
-        }
-
-        [AfterScenario]
-        public void AfterScenario()
-        {
-            var driver = _container.Resolve<IWebDriver>();
-
-            if(driver != null)
-            {
-                driver.Quit();
-            }
-
-        }
+    [AfterFeature]
+    public static void AfterFeature()
+    {
+        //GetDriver().Quit();
     }
 }
